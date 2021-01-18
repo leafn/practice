@@ -3,7 +3,7 @@ import Foundation
 struct Heap<T> {
     private var order: (T, T) -> Bool
     
-    private var arr = [T]()
+    public var arr = [T]()
     
     init(order: @escaping (T, T) -> Bool) {
         self.order = order
@@ -109,6 +109,15 @@ struct Heap<T> {
     @inline(__always) private func parent(_ i: Int) -> Int { Int(floor((Double(i) - 1) / 2)) }
     @inline(__always) private func left(_ i: Int) -> Int { 2 * i + 1 }
     @inline(__always) private func right(_ i: Int) -> Int { left(i) + 1 }
+}
+
+extension Heap where T: Equatable {
+    @discardableResult
+    mutating func remove(value: T) -> T? {
+        if let index = arr.firstIndex(where: { $0 == value }) {
+            return remove(at: index)
+        } else { return nil }
+    }
 }
 
 func heapSort<T>(_ arr: [T], order: @escaping (T, T) -> Bool) -> [T] {
