@@ -2,35 +2,29 @@ import Foundation
 
 func solution(_ n:Int) -> [Int] {
     var arr = [[Int]]()
-    for i in 0..<n {
-        arr.append([Int](repeating: 0, count: i + 1))
-    }
+    (0...n).forEach { arr.append([Int](repeating: 0, count: $0 + 1)) }
     
     var it = 0
     var total = 0
-    for i in 1...n {
-        switch i % 3 {
-        case 1:
-            for j in 2 * it..<n - it {
-                if it <= j {
-                    total += 1
-                    arr[j][it] = total
-                }
-            }
-            break
-        case 2:
-            for j in 1 + it..<n - 2 * it {
-                total += 1
-                arr[n - 1 - it][j] = total
-            }
-            break
+    
+    (1...n).forEach {
+        switch $0 % 3 {
         case 0:
-            for j in stride(from: n - it - 2, to: it * 2, by: -1) {
+            stride(from: n - it - 2, to: it * 2, by: -1).forEach {
                 total += 1
-                arr[j][j - it] = total
+                arr[$0][$0 - it] = total
             }
             it += 1
-            break
+        case 1:
+            (2 * it..<n - it).forEach {
+                total += 1
+                arr[$0][it] = total
+            }
+        case 2:
+            (1 + it..<n - 2 * it).forEach {
+                total += 1
+                arr[n - 1 - it][$0] = total
+            }
         default:
             break
         }
